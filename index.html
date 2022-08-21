@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <ul id="nomes"></ul>
+  <input name="nome" id="nome" />
+  <button type="button" onclick="clique()">Clique</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script>
+  <script>
+    var socket = io();
+    socket.on('base', function(response){
+      loadNomes(response.datas);      
+    });    
+    socket.emit('base','');
+    function loadNomes(datas) {
+      $("#nomes").empty();
+        if (datas.length > 0){
+          $.each(datas, function(index, data) {
+            $("#nomes").append("<li>" + data + "</li>");
+          });
+        }
+    }
+    function clique(){
+      var nome = document.getElementById('nome').value;              
+      socket.emit('base',nome)      
+    }
+</script>
+</body>
+</html>
